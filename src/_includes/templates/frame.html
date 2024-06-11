@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>{{title}}</title>
+        <link rel="stylesheet" href="/css/global.css">
+    </head>
+
+    <body>        
+        <!-- <div class="fixed top-0 w-full h-full">
+            {% include "templates/background.html" %}
+        </div> -->
+ 
+        <div class="absolute">
+            {% include "templates/header.html" %}
+            {{ content | safe }}
+        </div>
+    </body>
+
+</html>
