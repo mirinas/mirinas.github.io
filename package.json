@@ -1,7 +1,8 @@
 {
     "name": "portfolio",
     "scripts": {
-        "serve": "npx eleventy --serve"
+        "serve": "npx eleventy --serve",
+        "build": "npx eleventy"
     },
     "devDependencies": {
         "@11ty/eleventy": "github:11ty/eleventy"
