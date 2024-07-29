@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://raw.githubusercontent.com/lodash/lodash/4.17.15-npm/core.js"></script>
+        <title>About me | Augustas Mirinas</title>
+        <link rel="stylesheet" href="/css/global.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+
+    <body class="bg-slate-50 text-slate-700 text-lg tracking-wide">
+        <div class="fixed top-0 w-full h-full">
+            <svg id="background" class="w-full h-full"
+    viewBox="0.5 0 5 10" preserveAspectRatio="none">
+</svg>
+
+<script>
+    // const PATH_ARGS = `fill="rgba(0.8, 0.8, 0.8, 0.1)" stroke="black"`
+    const PATH_ATTRS = `class="fill-slate-100 stroke-slate-400" stroke-width="0.04"`
+    const EQUATION = x => 4 * Math.sin(x / 4) - 1
+    const SMOOTHING = 0.1
+
+    
+
+    addEventListener('scroll', () => {
+            const scroll = document.documentElement.scrollTop || document.body.scrollTop;
+            draw(scroll / 10);
+        });
+    
+    const draw = (scroll) => {
+
+        // TODO: add more equations as SVG groups <g>
+        // TODO: to optimize - only compute one period of sin functions
+        const svg = document.querySelector('#background');
+        svg.innerHTML = computeFrame(scroll);
+    }
+
+
+
+/*----------------------------------------------------------------------------------------*/
+    // equation rendering to SVG adapted from François Romain
+    // https://francoisromain.medium.com/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
+/*----------------------------------------------------------------------------------------*/
+
+    // Properties of a line 
+    // I:  - pointA (array) [x,y]: coordinates
+    //     - pointB (array) [x,y]: coordinates
+    // O:  - (object) { length: l, angle: a }: properties of the line
+    const line = (pointA, pointB) => {
+    const lengthX = pointB[0] - pointA[0]
+    const lengthY = pointB[1] - pointA[1]
+    return {
+        length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+        angle: Math.atan2(lengthY, lengthX)
+    }
+    }
+
+    // Position of a control point 
+    // I:  - current (array) [x, y]: current point coordinates
+    //     - previous (array) [x, y]: previous point coordinates
+    //     - next (array) [x, y]: next point coordinates
+    //     - reverse (boolean, optional): sets the direction
+    // O:  - (array) [x,y]: a tuple of coordinates
+    const controlPoint = (current, previous, next, reverse) => {
+
+    // When 'current' is the first or last point of the array
+    // 'previous' or 'next' don't exist.
+    // Replace with 'current'
+    const p = previous || current
+    const n = next || current
+
+    // Properties of the opposed-line
+    const o = line(p, n)
+
+    // If is end-control-point, add PI to the angle to go backward
+    const angle = o.angle + (reverse ? Math.PI : 0)
+    const length = o.length * SMOOTHING
+
+    // The control point position is relative to the current point
+    const x = current[0] + Math.cos(angle) * length
+    const y = current[1] + Math.sin(angle) * length
+    return [x, y]
+    }
+
+    // Create the bezier curve command 
+    // I:  - point (array) [x,y]: current point coordinates
+    //     - i (integer): index of 'point' in the array 'a'
+    //     - a (array): complete array of points coordinates
+    // O:  - (string) 'C x2,y2 x1,y1 x,y': SVG cubic bezier C command
+    const bezierCommand = (point, i, a) => {
+
+    // start control point
+    const cps = controlPoint(a[i - 1], a[i - 2], point)
+
+    // end control point
+    const cpe = controlPoint(point, a[i - 1], a[i + 1], true)
+    return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point[0]},${point[1]}`
+    }
+
+    // Render the svg <path> element 
+    // I:  - points (array): points coordinates
+    //     - command (function)
+    //       I:  - point (array) [x,y]: current point coordinates
+    //           - i (integer): index of 'point' in the array 'a'
+    //           - a (array): complete array of points coordinates
+    //       O:  - (string) a svg path command
+    // O:  - (string): a Svg <path> element
+    const svgPath = (points, command) => {
+    // build the d attributes by looping over the points
+    const d = points.reduce((acc, point, i, a) => i === 0
+        ? `M ${point[0]},${point[1]}`
+        : `${acc} ${command(point, i, a)}`
+    , '')
+    return `<path d="${d}" ${PATH_ATTRS} />`
+    }
+
+
+
+
+    const cache = {};
+    const coords = (x, y) => [x, 4 - y]
+    
+    function computeFrame(offset) {
+        offset = Math.round((offset + Number.EPSILON) * 10) / 10;
+        let cached = cache[offset];
+        if(cached) return cached;
+
+        const points = [];
+        for(let x = 0; x < 7; x++) {
+            let xy = coords(x, EQUATION(x + offset));
+            points.push(xy);
+        }
+        
+        let path = svgPath(points, bezierCommand);
+        cache[offset] = path;
+        return path;
+    }
+    draw(0);
+
+</script>
+        </div>
+ 
+        <div class="absolute w-full">
+            <header class="p-4 sticky top-0 z-10 h-36 min-w-96 md:h-20 backdrop-blur-md backdrop-brightness-90">
+    <div class="flex justify-end items-center h-full">
+        <h1 class="font-bold tracking-widest text-lg grow pl-8">AUGUSTAS<br>MIRINAS</h1>
+        <div class="">
+            <a href="/" class="w-48 mx-4 md:inline block hover:underline text-center">ABOUT ME</a>
+            <a href="/portfolio" class="w-48 mx-4 md:inline block hover:underline text-center">PORTFOLIO</a>
+            <a href="/services" class="w-48 mx-4 md:inline block hover:underline text-center">SERVICES</a>
+            <a href="/#contact" class="w-48 mx-4 md:inline block hover:underline text-center">CONTACT</a>
+        </div>
+    </div>
+</header>
+            
+<article>
+    <div>
+        <h1 id="greeting" class="text-4xl font-bold mb-8">Good PERIOD</h1>
+        <p>
+            I am Augustas, an experienced backend developer based in Vilnius, Lithuania. After graduating from <a target="_blank" href="https://www.southampton.ac.uk">University of Southampton</a> I received an offer to further research ideas proposed in the thesis - now my current focus is transparent and decentralised <a href="/portfolio#fabric">personal data sharing</a>, enabled by distributed computing.
+        </p>
+        <p class="mt-4">Take a look at my <a target="_blank" href="/pdf/cv.pdf">CV</a> for more details ;)</p>
+
+        <img src="/resources/gears.png" class="h-28 block m-auto my-16">
+
+        <p>
+            Business process automation is another area of my expertise. After 4 years of designing, implementing and maintaining information systems, each with unique business requirements, I offer only the best long-term solutions, individually tailored for every client.
+        </p>
+        <p class="mt-4">If you're interested how can your business be more efficient, visit <a href="/services">here</a>.</p>
+    </div>
+</article>
+
+<article id="contact">
+    <div>
+        <h1 class="text-4xl font-bold mb-8">Leave me a message 📫</h1>
+        <div class="w-full block">
+            <input id="email" placeholder="Your email" class="lg:w-96 w-full rounded sm mt-4 p-0.5 radius-2 border-2 border-slate-200 bg-transparent !outline-none focus:bg-white focus:opacity-60 block" type="email">
+            <textarea id="body" placeholder="Ask anything!"
+                class="lg:w-2/3 w-full rounded sm mt-4 p-0.5 radius-2 border-2 border-slate-200 bg-transparent !outline-none focus:bg-white focus:opacity-60 resize-none h-48 lg:inline"></textarea>
+            <p id="notification" class="hidden my-4 lg:text-center lg:absolute lg:ml-24 top-1/2"></p>
+        </div>
+        <button class="mt-2 sm:w-auto w-full p-2 px-24 bg-slate-700 active:bg-slate-900 rounded text-white disabled:opacity-75"
+            onclick="sendEmail(this)">SEND</button>
+    </div>
+</article>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+<script>
+    function sendEmail(button) {
+        
+        const notification = document.querySelector('#notification');
+
+        const address = document.querySelector('#email');
+        const body = document.querySelector('#body');
+
+        if(!address.value.trim().match(/^[^@]+@[^@]+\.[^@]+$/) || !body.value.trim()) {
+            notification.innerHTML = '<b class="text-red-600">Error!</b><br>Invalid address or empty body!'
+            notification.style.display = 'inline-block';
+            return;
+        }
+
+        axios.get('https://script.google.com/macros/s/AKfycbwslSIIiuXP6s8ftYorW6zPTiNUzLF3UuSdjm3jjeOOlpgPaCSjkKKm0bZp9NuNrtwT6Q/exec' +
+        `?email=${encodeURIComponent(address.value)}&body=${encodeURIComponent(body.value)}`)
+        .then(() => {
+            body.value = '';
+            notification.innerHTML = '<b class="text-green-600">Message sent!</b><br>Expect a reply soon :)';
+            notification.style.display = 'inline-block';
+        }).catch(err => {
+            notification.innerHTML = '<b class="text-red-600">Error!</b><br>' + err.message;
+            notification.style.display = 'inline-block';
+        }).finally(() => {
+            button.disabled = false;
+        });
+
+        button.disabled = true;
+    }
+
+    function getPeriod(e) {
+        const period = hour => {
+            if(hour > 17) return 'evening 🌆';
+            if(hour < 4) return 'night 🌙';
+            if(hour < 10) return 'morning 🌄';
+            return 'day 🌥️';
+        }
+        e.innerHTML = e.innerHTML.replace('PERIOD', period(new Date().getHours()));
+    }
+    getPeriod(document.querySelector('#greeting'));
+</script>
+        </div>
+    </body>
+
+</html>

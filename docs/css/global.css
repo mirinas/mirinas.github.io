@@ -1,0 +1,37 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+article a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+a:hover {
+    color: #94a3b8;
+}
+
+article {
+    margin: 6em 0;
+    min-width: 24rem;
+    padding: 4em 1em;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+article > div {
+    margin: auto;
+}
+
+article, header {
+    box-shadow: inset 0 0 1em 1em rgba(148,163,184, 0.1);
+}
+
+@media (min-width: 768px) {
+    article {
+        border-radius: 6px;
+        margin: 6em;
+    }
+    article > div {
+        width: 60%;
+        text-align: justify;
+    }
+}
