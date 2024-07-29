@@ -1,0 +1,48 @@
+---
+layout: templates/frame.html
+title: Portfolio
+---
+<article id="fabric">
+    <div>
+        <h1 class="text-4xl mb-8 font-bold">Personal data sharing</h1>
+        <h2>Research assistant, University of Southampton</h2>
+        <h2>2024 June - September</h2>
+        <a class="mb-4 inline-block relative top-2" target="_blank" href="https://github.com/mirinas/personal-data-sharing">
+            <i class="fa fa-github text-4xl"></i>
+        </a>
+        <span class="text-sm tracking-widest select-none font-bold bg-slate-500 p-2 rounded-full text-slate-50">HYPERLEDGER</span>
+        <span class="text-sm tracking-widest select-none font-bold bg-orange-400 p-2 rounded-full text-orange-50">JAVA</span>
+        <span class="text-sm tracking-widest select-none font-bold bg-lime-500 p-2 rounded-full text-lime-50">SPRING</span>
+        <span class="text-sm tracking-widest select-none font-bold bg-blue-500 p-2 rounded-full text-blue-50">DOCKER</span>
+        <h4 class="text-2xl font-bold mt-8"><a target="_blank" href="https://www.upcast-project.eu/">UPCAST</a></h4>
+        <p>
+            EU-backed project, with University of Southampton as a technical coordinator, and the rest of consortium made of 16 partners from 9 different european countries, provides a set of universal, trustworthy, transparent, and user-friendly data market plugins for the automation of data sharing and processing agreements between businesses, public administrations and citizens. While working as a research assistant, I had a unique experience of participating in a General Assembly of this project, taking place in Southampton and I am extremely thankful for every moment from this meeting. During three-day project meeting, I:
+        </p>
+        <ul class="pl-10 list-disc mb-8">
+            <li>experienced multinational multimillion-euro project coordination challenges and intricacies</li>
+            <li>met many successful academics and professionals from different countries</li>
+            <li>analysed challenges and legal requirements of data management and exchange</li>
+        </ul>
+
+        <!-- photo from southampton meeting -->
+
+        <h4 class="text-2xl font-bold">Decentralisation</h4>
+        <p class="mb-8">
+            This project initially started as a thesis for my Bachelor degree, and ended up being a research project for the whole summer after graduation, led by <a target="_blank" href="https://scholar.google.co.uk/citations?user=dg3_PMoAAAAJ&hl=en">Dr George Konstantinidis</a>. The project is based on <a target="_blank" href="https://www.hyperledger.org/projects/fabric">Hyperledger Fabric</a> - an open source distributed ledger technology, part of the Linux Foundation. Here, Fabric is utilised to create a network of data controllers, processing units and data subjects authorising private data usage.
+        </p>
+        <p class="mb-2">
+            Decentralisation means no single network participant controls the network - whether it is data upload, query or other processing - each decision is endorsed by multiple network participants to ensure private data usage transparency and respect for data subject consent. In this system, decentralised architecture model is also apparent with data storage - instead of a central data exchange collecting all shared information to a single data store (e.g. <a target="_blank" href="https://www.youtube.com/watch?v=Lu9QVJ0Rml4">AWS Data Exchange</a>), every participant of this network only stores relevant data, authorized for their access. Some benefits decentralised architecture offers:
+        </p>
+        <ul class="pl-10 list-disc mb-8">
+            <li><b>Transparency and auditability</b>: every network action is authorised and verified by other network members</li>
+            <li><b>Scalability</b>: network members collaboratively store personal data without the need of trusted centralised storage, making this network self-sustainable</li>
+            <li><b>Data redundancy</b>: private data is stored by every network participant authorised to that data, ensuring a resilient network</li>
+        </ul>
+
+        <!-- diagram explaining endorsement and chaincode functions -->
+         
+        <p class="mb-2">
+            Inspired by the UPCAST project, my implementation of decentralised data exchange network is based on <a target="_blank" href="https://www.w3.org/ns/odrl/2/">ODLR ontology</a> to describe data being shared and to express consent. Data subjects can define specific operations that can be performed on their data, who can perform those operations and for what purpose. During three-month internship, I have implemented Fabric chaincode to decentralise privacy policies, Fabric Gateways as Java Spring Boot APIs to correctly invoke and endorse transactions, based on what access do network participants have on subject data, and front-end client applications. Full project can be found in the Github repository.
+        </p>
+    </div>
+</article>

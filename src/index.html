@@ -4,19 +4,79 @@ title: About me
 ---
 
 <article>
-    <h1 class="text-4xl font-bold mb-4">Fusce maximus</h1>
-    <p>
-        Vestibulum sodales neque non eleifend eleifend. Duis sagittis mauris nec posuere commodo. Vestibulum sit amet sapien vitae nisl blandit commodo. Aenean in ipsum in tortor pulvinar sagittis in eget dolor. Pellentesque ligula mauris, ultrices quis sodales et, scelerisque at ipsum. Nulla a dictum risus. Cras vel posuere neque. Fusce maximus semper ex id fermentum. Vestibulum maximus dui tellus, eget vestibulum ipsum finibus eu. Quisque sed maximus risus, non commodo tellus. Aenean quis nunc ac massa molestie lacinia a non erat.
-        
-        Vivamus consectetur euismod ex eu congue. Sed ac elementum nisi, a sollicitudin erat. Sed egestas, ex nec condimentum consequat, tellus enim viverra turpis, a lobortis metus tortor eu turpis. Aliquam nisl nibh, aliquam in pretium eget, facilisis quis est. Nullam tincidunt semper blandit. In nec congue risus, eu ornare tellus. Cras a nisl et lacus porttitor scelerisque sed tincidunt turpis. Cras et tortor sit amet arcu elementum tincidunt. Aenean id tempor massa. Maecenas tempor leo tellus, sed scelerisque elit pellentesque vitae. Vivamus faucibus dui in erat tincidunt accumsan. Mauris sagittis lobortis mi, eu eleifend neque blandit vitae. Donec elementum orci est, ut vulputate est efficitur laoreet.
-    </p>
+    <div>
+        <h1 id="greeting" class="text-4xl font-bold mb-8">Good PERIOD</h1>
+        <p>
+            I am Augustas, an experienced backend developer based in Vilnius, Lithuania. After graduating from <a target="_blank" href="https://www.southampton.ac.uk">University of Southampton</a> I received an offer to further research ideas proposed in the thesis - now my current focus is transparent and decentralised <a href="/portfolio#fabric">personal data sharing</a>, enabled by distributed computing.
+        </p>
+        <p class="mt-4">Take a look at my <a target="_blank" href="/pdf/cv.pdf">CV</a> for more details ;)</p>
+
+        <img src="/resources/gears.png" class="h-28 block m-auto my-16">
+
+        <p>
+            Business process automation is another area of my expertise. After 4 years of designing, implementing and maintaining information systems, each with unique business requirements, I offer only the best long-term solutions, individually tailored for every client.
+        </p>
+        <p class="mt-4">If you're interested how can your business be more efficient, visit <a href="/services">here</a>.</p>
+    </div>
 </article>
-<div class="h-96"></div>
-<article>
-    <h3 class="text-xl font-bold mb-4">Fusce maximus</h3>
-    <p>
-        Vestibulum sodales neque non eleifend eleifend. Duis sagittis mauris nec posuere commodo. Vestibulum sit amet sapien vitae nisl blandit commodo. Aenean in ipsum in tortor pulvinar sagittis in eget dolor. Pellentesque ligula mauris, ultrices quis sodales et, scelerisque at ipsum. Nulla a dictum risus. Cras vel posuere neque. Fusce maximus semper ex id fermentum. Vestibulum maximus dui tellus, eget vestibulum ipsum finibus eu. Quisque sed maximus risus, non commodo tellus. Aenean quis nunc ac massa molestie lacinia a non erat.
-        
-        Vivamus consectetur euismod ex eu congue. Sed ac elementum nisi, a sollicitudin erat. Sed egestas, ex nec condimentum consequat, tellus enim viverra turpis, a lobortis metus tortor eu turpis. Aliquam nisl nibh, aliquam in pretium eget, facilisis quis est. Nullam tincidunt semper blandit. In nec congue risus, eu ornare tellus. Cras a nisl et lacus porttitor scelerisque sed tincidunt turpis. Cras et tortor sit amet arcu elementum tincidunt. Aenean id tempor massa. Maecenas tempor leo tellus, sed scelerisque elit pellentesque vitae. Vivamus faucibus dui in erat tincidunt accumsan. Mauris sagittis lobortis mi, eu eleifend neque blandit vitae. Donec elementum orci est, ut vulputate est efficitur laoreet.
-    </p>
+
+<article id="contact">
+    <div>
+        <h1 class="text-4xl font-bold mb-8">Leave me a message 📫</h1>
+        <div class="w-full block">
+            <input id="email" placeholder="Your email" class="lg:w-96 w-full rounded sm mt-4 p-0.5 radius-2 border-2 border-slate-200 bg-transparent !outline-none focus:bg-white focus:opacity-60 block" type="email">
+            <textarea id="body" placeholder="Ask anything!"
+                class="lg:w-2/3 w-full rounded sm mt-4 p-0.5 radius-2 border-2 border-slate-200 bg-transparent !outline-none focus:bg-white focus:opacity-60 resize-none h-48 lg:inline"></textarea>
+            <p id="notification" class="hidden my-4 lg:text-center lg:absolute lg:ml-24 top-1/2"></p>
+        </div>
+        <button class="mt-2 sm:w-auto w-full p-2 px-24 bg-slate-700 active:bg-slate-900 rounded text-white disabled:opacity-75"
+            onclick="sendEmail(this)">SEND</button>
+    </div>
 </article>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+<script>
+    function sendEmail(button) {
+        
+        const notification = document.querySelector('#notification');
+
+        const address = document.querySelector('#email');
+        const body = document.querySelector('#body');
+
+        if(!address.value.trim().match(/^[^@]+@[^@]+\.[^@]+$/) || !body.value.trim()) {
+            notification.innerHTML = '<b class="text-red-600">Error!</b><br>Invalid address or empty body!'
+            notification.style.display = 'inline-block';
+            return;
+        }
+
+        axios.get('https://script.google.com/macros/s/AKfycbwslSIIiuXP6s8ftYorW6zPTiNUzLF3UuSdjm3jjeOOlpgPaCSjkKKm0bZp9NuNrtwT6Q/exec' +
+        `?email=${encodeURIComponent(address.value)}&body=${encodeURIComponent(body.value)}`)
+        .then(() => {
+            body.value = '';
+            notification.innerHTML = '<b class="text-green-600">Message sent!</b><br>Expect a reply soon :)';
+            notification.style.display = 'inline-block';
+        }).catch(err => {
+            notification.innerHTML = '<b class="text-red-600">Error!</b><br>' + err.message;
+            notification.style.display = 'inline-block';
+        }).finally(() => {
+            button.disabled = false;
+        });
+
+        button.disabled = true;
+    }
+
+    function getPeriod(e) {
+        const period = hour => {
+            if(hour > 17) return 'evening 🌆';
+            if(hour < 4) return 'night 🌙';
+            if(hour < 10) return 'morning 🌄';
+            return 'day 🌥️';
+        }
+        e.innerHTML = e.innerHTML.replace('PERIOD', period(new Date().getHours()));
+    }
+    getPeriod(document.querySelector('#greeting'));
+</script>
